@@ -1,0 +1,42 @@
+[
+  {
+    "id": 0,
+    "imageUrl": "https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg",
+    "title": "Мексиканська",
+    "types": [0, 1],
+    "sizes": [26, 30, 40],
+    "price": 800,
+    "category": 0,
+    "rating": 4
+  },
+  {
+    "id": 1,
+    "imageUrl": "https://dodopizza-a.akamaihd.net/static/Img/Products/d9c609f1422247f2b87b6293eb461ff0_292x292.webp",
+    "title": "Сирна",
+    "types": [0],
+    "sizes": [30, 40],
+    "price": 600,
+    "category": 1,
+    "rating": 6
+  },
+  {
+    "id": 2,
+    "imageUrl": "https://dodopizza-a.akamaihd.net/static/Img/Products/11eebaa59d612b318f3c43c6170aafd6_292x292.webp",
+    "title": "Баварська",
+    "types": [0],
+    "sizes": [26, 30, 40],
+    "price": 950,
+    "category": 0,
+    "rating": 5
+  },
+  {
+    "id": 3,
+    "imageUrl": "https://dodopizza-a.akamaihd.net/static/Img/Products/27c9bbd0af3a4d1d84a086d9c2f1656d_292x292.webp",
+    "title": "Пепероні",
+    "types": [0, 1],
+    "sizes": [26, 40],
+    "price": 750,
+    "category": 1,
+    "rating": 10
+  }
+]
