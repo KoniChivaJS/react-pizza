@@ -8,20 +8,42 @@ const Home = () => {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [categoryId, setCategoryId] = useState(0);
+  const [sortType, setSortType] = useState({
+    name: "популярністю",
+    sortProperty: "rating",
+  });
+  const [isDesc, setIsDesc] = useState(true);
+
   useEffect(() => {
-    fetch("https://65c7cc54e7c384aada6ef7f5.mockapi.io/items")
+    setIsLoading(true);
+    fetch(
+      `https://65c7cc54e7c384aada6ef7f5.mockapi.io/items?${
+        categoryId > 0 ? `category=${categoryId}` : ""
+      }&sortBy=${sortType.sortProperty}&order=${isDesc ? "desc" : "asc"}`
+    )
       .then((res) => res.json())
       .then((json) => {
         setItems(json);
         setIsLoading(false);
       });
+
     window.scrollTo(0, 0);
-  }, []);
+  }, [categoryId, sortType, isDesc]);
+  console.log(sortType);
   return (
     <div className="container">
       <div className="content__top">
-        <Categories />
-        <Sort />
+        <Categories
+          value={categoryId}
+          onChangeCategory={(id) => setCategoryId(id)}
+        />
+        <Sort
+          value={sortType}
+          onChangeSort={(i) => setSortType(i)}
+          isDesc={isDesc}
+          setDesc={setIsDesc}
+        />
       </div>
       <h2 className="content__title">Всі піци</h2>
       <div className="content__items">
