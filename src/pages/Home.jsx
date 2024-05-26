@@ -5,17 +5,21 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 import { useContext, useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategoryId } from "../redux/slices/filterSlice";
 const Home = () => {
+  const sortType = useSelector((state) => state.filter.sort);
+  const categoryId = useSelector((state) => state.filter.categoryId);
+  const dispatch = useDispatch();
   const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [categoryId, setCategoryId] = useState(0);
-  const [sortType, setSortType] = useState({
-    name: "популярністю",
-    sortProperty: "rating",
-  });
+
   const [isDesc, setIsDesc] = useState(true);
+  const onChangeCategory = (id) => {
+    dispatch(setCategoryId(id));
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -45,16 +49,8 @@ const Home = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Categories
-          value={categoryId}
-          onChangeCategory={(id) => setCategoryId(id)}
-        />
-        <Sort
-          value={sortType}
-          onChangeSort={(i) => setSortType(i)}
-          isDesc={isDesc}
-          setDesc={setIsDesc}
-        />
+        <Categories value={categoryId} onChangeCategory={onChangeCategory} />
+        <Sort isDesc={isDesc} setDesc={setIsDesc} />
       </div>
       <h2 className="content__title">Всі піци</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
