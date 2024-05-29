@@ -7,6 +7,7 @@ const initialState = {
     name: "популярністю",
     sortProperty: "rating",
   },
+  isDesc: true,
 };
 
 const filterSlice = createSlice({
@@ -22,8 +23,15 @@ const filterSlice = createSlice({
     setPageCount(state, action) {
       state.pageCount = action.payload;
     },
+    setFilters(state, action) {
+      state.pageCount = Number(action.payload.currentPage);
+      state.categoryId = Number(action.payload.categoryId);
+      state.sort = action.payload.sortProperty;
+      state.isDesc = action.payload.isDesc;
+    },
   },
 });
 
-export const { setCategoryId, setSort, setPageCount } = filterSlice.actions;
+export const { setCategoryId, setSort, setPageCount, setFilters } =
+  filterSlice.actions;
 export default filterSlice.reducer;
