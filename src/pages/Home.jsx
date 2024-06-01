@@ -14,18 +14,20 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import qs from "qs";
+import { fetchPizzas } from "../redux/slices/pizzaSlice";
 const Home = () => {
   const navigate = useNavigate();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
+  //selectors
   const sortType = useSelector((state) => state.filter.sort);
   const categoryId = useSelector((state) => state.filter.categoryId);
   const currentPage = useSelector((state) => state.filter.pageCount);
+  const { items, status } = useSelector((state) => state.pizza);
+  //dispatch
   const dispatch = useDispatch();
-  const { searchValue } = useContext(SearchContext);
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
+  const { searchValue } = useContext(SearchContext);
   const [isDesc, setIsDesc] = useState(true);
 
   const onChangeCategory = (id) => {
@@ -35,23 +37,20 @@ const Home = () => {
     dispatch(setPageCount(number));
   };
 
-  const fetchPizzas = () => {
-    setIsLoading(true);
+  const getPizzas = async () => {
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const sort = sortType.sortProperty;
     const Desc = isDesc ? "desc" : "asc";
     const search = searchValue ? `&search=${searchValue}` : "";
-    axios
-      .get(
-        `https://65c7cc54e7c384aada6ef7f5.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sort}&order=${Desc}${search}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
+    dispatch(
+      fetchPizzas({
+        category,
+        sort,
+        Desc,
+        search,
+        currentPage,
       })
-      .catch((e) => {
-        setItems([]);
-      });
+    );
   };
 
   useEffect(() => {
@@ -65,7 +64,7 @@ const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!isSearch.current) {
-      fetchPizzas();
+      getPizzas();
     }
     isSearch.current = false;
   }, [categoryId, sortType, isDesc, searchValue, currentPage]);
@@ -92,7 +91,13 @@ const Home = () => {
         <Sort isDesc={isDesc} setDesc={setIsDesc} />
       </div>
       <h2 className="content__title">Всі піци</h2>
-      <div className="content__items">{isLoading ? skeletons : pizzas}</div>
+      {status == "error" ? (
+        <h1>Помилка :\</h1>
+      ) : (
+        <div className="content__items">
+          {status == "loading" ? skeletons : pizzas}
+        </div>
+      )}
       <Pagination onChangePage={onChangePage} />
     </div>
   );
