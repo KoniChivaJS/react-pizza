@@ -4,36 +4,39 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { useContext, useEffect, useRef, useState } from "react";
 import Pagination from "../components/Pagination";
-import { SearchContext } from "../App";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setCategoryId,
   setPageCount,
   setFilters,
+  selectSort,
+  selectCategory,
+  selectPage,
+  selectSearch,
 } from "../redux/slices/filterSlice";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import qs from "qs";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice";
+
 const Home = () => {
   const navigate = useNavigate();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
   //selectors
-  const sortType = useSelector((state) => state.filter.sort);
-  const categoryId = useSelector((state) => state.filter.categoryId);
-  const currentPage = useSelector((state) => state.filter.pageCount);
-  const { items, status } = useSelector((state) => state.pizza);
+  const sortType = useSelector(selectSort);
+  const categoryId = useSelector(selectCategory);
+  const currentPage = useSelector(selectPage);
+  const { items, status } = useSelector(selectPizza);
   //dispatch
   const dispatch = useDispatch();
 
-  const { searchValue } = useContext(SearchContext);
+  const searchValue = useSelector(selectSearch);
   const [isDesc, setIsDesc] = useState(true);
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id: number) => {
     dispatch(setCategoryId(id));
   };
-  const onChangePage = (number) => {
+  const onChangePage = (number: number) => {
     dispatch(setPageCount(number));
   };
 
@@ -43,6 +46,7 @@ const Home = () => {
     const Desc = isDesc ? "desc" : "asc";
     const search = searchValue ? `&search=${searchValue}` : "";
     dispatch(
+      //@ts-ignore
       fetchPizzas({
         category,
         sort,
@@ -82,7 +86,7 @@ const Home = () => {
     isMounted.current = true;
   }, [categoryId, sortType, isDesc, currentPage]);
 
-  const pizzas = items.map((obj) => <PizzaBlock {...obj} key={obj.id} />);
+  const pizzas = items.map((obj: any) => <PizzaBlock {...obj} key={obj.id} />);
   const skeletons = [...new Array(4)].map((_, i) => <Skeleton key={i} />);
   return (
     <div className="container">

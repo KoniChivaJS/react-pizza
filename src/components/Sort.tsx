@@ -1,17 +1,33 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSort } from "../redux/slices/filterSlice";
-function Sort({ isDesc, setDesc }) {
+
+type SortProps = {
+  isDesc: boolean;
+  setDesc: any;
+};
+type SortItem = {
+  name: string;
+  sortProperty: string;
+};
+
+const Sort: React.FC<SortProps> = ({ isDesc, setDesc }) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const sort = useSelector((state) => state.filter.sort);
-  const list = [
+  const sort = useSelector(
+    (state: {
+      filter: {
+        sort: SortItem;
+      };
+    }) => state.filter.sort
+  );
+  const list: SortItem[] = [
     { name: "популярністю", sortProperty: "rating" },
     { name: "ціною", sortProperty: "price" },
     { name: "алфавітом", sortProperty: "title" },
   ];
 
-  const onClickListItem = (obj) => {
+  const onClickListItem = (obj: SortItem) => {
     dispatch(setSort(obj));
     setOpen(false);
   };
@@ -71,5 +87,5 @@ function Sort({ isDesc, setDesc }) {
       )}
     </div>
   );
-}
+};
 export default Sort;

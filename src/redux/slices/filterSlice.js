@@ -8,6 +8,7 @@ const initialState = {
     sortProperty: "rating",
   },
   isDesc: true,
+  search: "",
 };
 
 const filterSlice = createSlice({
@@ -29,9 +30,15 @@ const filterSlice = createSlice({
       state.sort = action.payload.sortProperty;
       state.isDesc = action.payload.isDesc;
     },
+    setSearch(state, action) {
+      state.search = action.payload;
+    },
   },
 });
-
-export const { setCategoryId, setSort, setPageCount, setFilters } =
+export const selectSearch = (state) => state.filter.search;
+export const selectSort = (state) => state.filter.sort;
+export const selectCategory = (state) => state.filter.categoryId;
+export const selectPage = (state) => state.filter.pageCount;
+export const { setCategoryId, setSort, setPageCount, setFilters, setSearch } =
   filterSlice.actions;
 export default filterSlice.reducer;
