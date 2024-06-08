@@ -1,14 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSort } from "../redux/slices/filterSlice";
+import { TSort, setSort } from "../redux/slices/filterSlice";
 
 type SortProps = {
   isDesc: boolean;
   setDesc: any;
-};
-type SortItem = {
-  name: string;
-  sortProperty: string;
 };
 
 const Sort: React.FC<SortProps> = ({ isDesc, setDesc }) => {
@@ -17,17 +13,17 @@ const Sort: React.FC<SortProps> = ({ isDesc, setDesc }) => {
   const sort = useSelector(
     (state: {
       filter: {
-        sort: SortItem;
+        sort: TSort;
       };
     }) => state.filter.sort
   );
-  const list: SortItem[] = [
+  const list: TSort[] = [
     { name: "популярністю", sortProperty: "rating" },
     { name: "ціною", sortProperty: "price" },
     { name: "алфавітом", sortProperty: "title" },
   ];
 
-  const onClickListItem = (obj: SortItem) => {
+  const onClickListItem = (obj: TSort) => {
     dispatch(setSort(obj));
     setOpen(false);
   };

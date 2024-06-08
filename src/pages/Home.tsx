@@ -17,6 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice";
+import { useAppDispatch } from "../redux/store";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Home = () => {
   const currentPage = useSelector(selectPage);
   const { items, status } = useSelector(selectPizza);
   //dispatch
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const searchValue = useSelector(selectSearch);
   const [isDesc, setIsDesc] = useState(true);
@@ -46,7 +47,6 @@ const Home = () => {
     const Desc = isDesc ? "desc" : "asc";
     const search = searchValue ? `&search=${searchValue}` : "";
     dispatch(
-      //@ts-ignore
       fetchPizzas({
         category,
         sort,
