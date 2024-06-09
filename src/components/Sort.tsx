@@ -3,20 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { TSort, setSort } from "../redux/slices/filterSlice";
 
 type SortProps = {
+  value: TSort;
   isDesc: boolean;
-  setDesc: any;
+  setDesc: (desc: boolean) => void;
 };
 
-const Sort: React.FC<SortProps> = ({ isDesc, setDesc }) => {
+const Sort: React.FC<SortProps> = React.memo(({ value, isDesc, setDesc }) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const sort = useSelector(
-    (state: {
-      filter: {
-        sort: TSort;
-      };
-    }) => state.filter.sort
-  );
+
   const list: TSort[] = [
     { name: "популярністю", sortProperty: "rating" },
     { name: "ціною", sortProperty: "price" },
@@ -62,7 +57,7 @@ const Sort: React.FC<SortProps> = ({ isDesc, setDesc }) => {
           </svg>
         )}
         <b>Сортування за:</b>
-        <span onClick={() => setOpen(!open)}>{sort.name}</span>
+        <span onClick={() => setOpen(!open)}>{value.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -71,7 +66,7 @@ const Sort: React.FC<SortProps> = ({ isDesc, setDesc }) => {
               <li
                 key={i}
                 className={
-                  sort.sortProperty === obj.sortProperty ? "active" : ""
+                  value.sortProperty === obj.sortProperty ? "active" : ""
                 }
                 onClick={() => onClickListItem(obj)}
               >
@@ -83,5 +78,5 @@ const Sort: React.FC<SortProps> = ({ isDesc, setDesc }) => {
       )}
     </div>
   );
-};
+});
 export default Sort;

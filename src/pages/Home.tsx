@@ -2,9 +2,9 @@ import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Pagination from "../components/Pagination";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   setCategoryId,
   setPageCount,
@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import qs from "qs";
 import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice";
 import { useAppDispatch } from "../redux/store";
+import React from "react";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -34,13 +35,12 @@ const Home = () => {
   const searchValue = useSelector(selectSearch);
   const [isDesc, setIsDesc] = useState(true);
 
-  const onChangeCategory = (id: number) => {
+  const onChangeCategory = React.useCallback((id: number) => {
     dispatch(setCategoryId(id));
-  };
+  }, []);
   const onChangePage = (number: number) => {
     dispatch(setPageCount(number));
   };
-
   const getPizzas = async () => {
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const sort = sortType.sortProperty;
@@ -92,7 +92,7 @@ const Home = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-        <Sort isDesc={isDesc} setDesc={setIsDesc} />
+        <Sort value={sortType} isDesc={isDesc} setDesc={setIsDesc} />
       </div>
       <h2 className="content__title">Всі піци</h2>
       {status == "error" ? (
